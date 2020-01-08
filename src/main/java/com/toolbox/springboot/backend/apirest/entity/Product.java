@@ -70,6 +70,10 @@ public class Product implements Serializable{
 	@OneToMany(mappedBy="product")
 	List<ProductImage> productImage;
 	
+	@JsonIgnore
+	@OneToMany(mappedBy="product")
+	List<ProductPayment> productPayment;
+	
 	@PrePersist
 	public void prePersist() {
 		this.productDate = new Date();
@@ -155,4 +159,14 @@ public class Product implements Serializable{
 	public Date getProductDate() {
 		return this.productDate;
 	}
+
+	public List<ProductPayment> getProductPayment() {
+		return productPayment;
+	}
+
+	public void setProductPayment(List<ProductPayment> productPayment) {
+		this.productPayment = productPayment;
+	}
+	
+	
 }
