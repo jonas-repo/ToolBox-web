@@ -59,10 +59,25 @@ public class UserGeneral implements Serializable{
 	
 	private boolean userEmailConfirmed;
 	
+
 	@OneToMany(mappedBy ="userGeneral")
 	@JsonIgnore
 	public List<UserGeneral> userGeneral;
 	
+
+	@JsonIgnore
+	@OneToMany(mappedBy="userGeneral")
+	List<UserPaymentMethods> userPaymentMethods;
+	
+	
+	
+	public List<UserPaymentMethods> getUserPaymentMethods() {
+		return userPaymentMethods;
+	}
+	public void setUserPaymentMethods(List<UserPaymentMethods> userPaymentMethods) {
+		this.userPaymentMethods = userPaymentMethods;
+	}
+
 	
 	public List<UserGeneral> getUserGeneral() {
 		return userGeneral;
