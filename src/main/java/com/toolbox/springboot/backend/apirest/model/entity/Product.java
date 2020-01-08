@@ -1,4 +1,4 @@
-package com.toolbox.springboot.backend.apirest.entity;
+package com.toolbox.springboot.backend.apirest.model.entity;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -69,6 +69,10 @@ public class Product implements Serializable{
 	@JsonIgnore
 	@OneToMany(mappedBy="product")
 	List<ProductImage> productImage;
+	
+	@OneToMany(mappedBy="productId")
+	@JsonIgnore
+	public List<UserPartnerProducts> userPartnerProducts;
 	
 	@PrePersist
 	public void prePersist() {
