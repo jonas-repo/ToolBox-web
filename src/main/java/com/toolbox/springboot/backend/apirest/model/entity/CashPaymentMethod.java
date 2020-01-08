@@ -1,4 +1,4 @@
-package com.toolbox.springboot.backend.apirest.entity;
+package com.toolbox.springboot.backend.apirest.model.entity;
 
 import java.io.Serializable;
 
