@@ -31,6 +31,11 @@ public class UserRoleAssigned implements Serializable{
 	@JoinColumn(name="userId")
 	@JsonIgnore
 	private UserGeneral userGeneral;
+	
+	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JoinColumn(name="userRoleId")
+	@JsonIgnore
+	private UserRole userRole;
 
 	public Long getUserRoleAssignedId() {
 		return userRoleAssignedId;

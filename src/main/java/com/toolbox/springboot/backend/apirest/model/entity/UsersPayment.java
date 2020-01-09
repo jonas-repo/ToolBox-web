@@ -30,7 +30,7 @@ public class UsersPayment implements Serializable
 	private UserGeneral partnerUserPaymentId;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	@JoinColumn(name = "userId" )
+	@JoinColumn(name = "userClientId" )
 	private UserGeneral clientUserPaymentId;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
