@@ -19,7 +19,6 @@ import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-
 @Entity
 @Table(name="product")
 public class Product implements Serializable{
@@ -108,11 +107,7 @@ public class Product implements Serializable{
 		this.productImage = productImage;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
-	}
-
-	public long getProductId() {
+	public Long getProductId() {
 		return this.productId;
 	}
 	

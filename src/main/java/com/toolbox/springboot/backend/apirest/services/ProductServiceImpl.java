@@ -36,14 +36,12 @@ public class ProductServiceImpl implements ProductService {
 	@Override
 	@Transactional
 	public Product save(Product product) {
-		// TODO Auto-generated method stub
 		return daoProduct.save(product);
 	}
 
 	@Override
 	@Transactional
 	public void delete(Long id) {
-		// TODO Auto-generated method stub
 		daoProduct.deleteById(id);
 	}
 }
