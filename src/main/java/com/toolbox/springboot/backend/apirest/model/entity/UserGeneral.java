@@ -65,7 +65,7 @@ public class UserGeneral implements Serializable{
 
 	@OneToMany(mappedBy ="userGeneral")
 	@JsonIgnore
-	public List<UserGeneral> userGeneral;
+	public List<UserRoleAssigned> userRole;
 	
 
 	@JsonIgnore
@@ -79,13 +79,6 @@ public class UserGeneral implements Serializable{
 		this.userPaymentMethods = userPaymentMethods;
 	}
 
-	
-	public List<UserGeneral> getUserGeneral() {
-		return userGeneral;
-	}
-	public void setUserGeneral(List<UserGeneral> userGeneral) {
-		this.userGeneral = userGeneral;
-	}
 	public Long getUserid() {
 		return userId;
 	}

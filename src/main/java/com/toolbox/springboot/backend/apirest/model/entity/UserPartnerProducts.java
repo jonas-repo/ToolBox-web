@@ -17,7 +17,7 @@ import com.toolbox.springboot.backend.apirest.model.entity.Product;
 import com.toolbox.springboot.backend.apirest.model.entity.UserGeneral;
 
 @Entity
-@Table(name="usesPartnerProducts")
+@Table(name="userPartnerProducts")
 public class UserPartnerProducts implements Serializable {
 
 	/**

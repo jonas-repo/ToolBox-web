@@ -49,8 +49,6 @@ public class ProductRestController {
 	@Autowired
 	private ProductService productService;
 	
-	private final Logger logger = LoggerFactory.getLogger(ProductRestController.class);
-	
 	@GetMapping("/products")
 	public List<Product> index(){
 		return productService.findAll();
@@ -101,7 +99,6 @@ public class ProductRestController {
 		
 		try {
 			nProduct = productService.save(product);
-			//uploadImagesProduct(images,nProduct);
 		}catch(DataAccessException e) {
 			response.put("message", "Error while making the query!");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -205,7 +202,6 @@ public class ProductRestController {
 				
 				String imageName = UUID.randomUUID().toString() + "_" +image.getOriginalFilename().replace(" ", "");
 				Path imageRoute = Paths.get("uploads/productImages").resolve(imageName).toAbsolutePath();
-				logger.info(imageRoute.toString());
 				try {
 					Files.copy(image.getInputStream(), imageRoute);
 				} catch (IOException e) {
@@ -249,7 +245,6 @@ public class ProductRestController {
 		Path routeFile = Paths.get("uploads/productImages").resolve(imageName).toAbsolutePath();
 		Resource resource = null;
 		
-		//logger.info(routeFile.toString());
 		try {
 			
 			resource =  new UrlResource(routeFile.toUri());
