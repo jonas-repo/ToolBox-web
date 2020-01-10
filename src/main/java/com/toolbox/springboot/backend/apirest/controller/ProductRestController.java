@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,8 +39,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toolbox.springboot.backend.apirest.model.entity.Product;
 import com.toolbox.springboot.backend.apirest.model.entity.ProductImage;
+import com.toolbox.springboot.backend.apirest.services.ProductImageService;
 import com.toolbox.springboot.backend.apirest.services.ProductService;
 
 @CrossOrigin(origins = {"http://localhost:4200"})
@@ -48,17 +53,31 @@ import com.toolbox.springboot.backend.apirest.services.ProductService;
 public class ProductRestController {
 	@Autowired
 	private ProductService productService;
-	
+	@Autowired
+	private ProductImageService productImageService;
+	/**
+	 * This method is used to return a list of all products
+	 */
 	@GetMapping("/products")
 	public List<Product> index(){
 		return productService.findAll();
 	}
 	
+	/**
+	 * This method is used to sort the result of all the products
+	 * @param page
+	 * @return a sorted list of all the products
+	 */
 	@GetMapping("/products/page/{page}")
 	public Page<Product> index(@PathVariable int page){
 		return productService.findAll(PageRequest.of(page, 5));
 	}
 	
+	/**
+	 * this is used to find an specific product finding it by the id
+	 * @param id
+	 * @return Product
+	 */
 	@GetMapping("/products/{id}")
 	public ResponseEntity<?> showProduct(@PathVariable Long id) {
 		
@@ -80,25 +99,26 @@ public class ProductRestController {
 		return new ResponseEntity<Product>(product, HttpStatus.OK);
 	}
 	
+	/*
+	 * This method is used to create a Product
+	 */
 	@PostMapping("/products")
-	public ResponseEntity<?> createProduct(@Valid @RequestBody Product product, BindingResult result) {
+	public ResponseEntity<?> createProduct(@RequestParam("product") String modelProduct, @RequestParam("images") MultipartFile[] images) {
+		
+		ObjectMapper mapper = new ObjectMapper();
+		Product product = null;
+		try {
+			product = mapper.readValue(modelProduct, Product.class);
+		} catch ( JsonProcessingException e) {
+			e.printStackTrace();
+		}
 		
 		Product nProduct = null;
 		Map<String, Object> response = new HashMap<>();
-		
-		if(result.hasErrors()) {
-			
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "The field '" + err.getField() + "' " + err.getDefaultMessage())
-					.collect(Collectors.toList());
-			
-			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-		}
-		
+				
 		try {
 			nProduct = productService.save(product);
+			uploadImagesProduct(images,nProduct);
 		}catch(DataAccessException e) {
 			response.put("message", "Error while making the query!");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -110,26 +130,27 @@ public class ProductRestController {
 		return new ResponseEntity<Map<String, Object>>( response, HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/products/{id}")
-	public ResponseEntity<?> updateProduct(@Valid @RequestBody Product product, BindingResult result, @PathVariable Long id) {
+	/*
+	 * This method is used to update a Product
+	 */
+	@PutMapping("/products")
+	public ResponseEntity<?> updateProduct(@RequestParam("product") String modelProduct, @RequestParam("images") MultipartFile[] images) {
 		
-		Product currentProduct = productService.findById(id);
+		ObjectMapper mapper = new ObjectMapper();
+		Product product = null;
+		
+		try {
+			product = mapper.readValue(modelProduct, Product.class);
+		} catch ( JsonProcessingException e) {
+			e.printStackTrace();
+		}
+		
+		Product currentProduct = productService.findById(product.getProductId());
 		Product updatedProduct = null;
 		Map<String, Object> response = new HashMap<>();
 		
-		if(result.hasErrors()) {
-			
-			List<String> errors = result.getFieldErrors()
-					.stream()
-					.map(err -> "The field '" + err.getField() + "' " + err.getDefaultMessage())
-					.collect(Collectors.toList());
-			
-			response.put("errors", errors);
-			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.BAD_REQUEST);
-		}
-		
 		if(currentProduct == null) {
-			response.put("message","Error: It couldn't be updated, the product ID: ".concat(id.toString().concat(" doesn't exist in the database!")));
+			response.put("message","Error: It couldn't be updated, the product doesn't exist in the database!");
 			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
 		
@@ -141,7 +162,10 @@ public class ProductRestController {
 			currentProduct.setProductPrice(product.getProductPrice());
 			currentProduct.setProductQuantity(product.getProductQuantity());
 			
-			updatedProduct = productService.save(currentProduct);			
+			updatedProduct = productService.save(currentProduct);
+			
+			uploadImagesProduct(images,updatedProduct);
+			
 		}catch(DataAccessException e) {	
 			response.put("message", "Error when updating the product in the database");
 			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
@@ -153,6 +177,9 @@ public class ProductRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
+	/*
+	 * This method is used to delete a Product
+	 */
 	@DeleteMapping("/products/{id}")
 	public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
 		
@@ -191,15 +218,19 @@ public class ProductRestController {
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
 	
-	
-	public ResponseEntity<?> uploadImagesProduct(@RequestParam("images") MultipartFile[] images, Product product){
-		Map<String, Object> response = new HashMap<>();
-		ProductImage productImage = new ProductImage();
+	/*
+	 * This method is used to upload a group of elements
+	 */
+	//@PostMapping("/products/upload")
+	//public ResponseEntity<?> uploadImagesProduct(@RequestParam("images") MultipartFile[] images, @RequestParam("productId") Long id){
+	public ResponseEntity<?> uploadImagesProduct(MultipartFile[] images, Product product){
 		
-		if(images.length>0) {
-			
-			for(MultipartFile image: images) {
+		Map<String, Object> response = new HashMap<>();
+		List<ProductImage> productImages = new ArrayList<>();
 				
+		for(MultipartFile image: images) {
+			if(productImageService.findByProductImageName(image.getOriginalFilename())==null) {
+				ProductImage productImage = new ProductImage();
 				String imageName = UUID.randomUUID().toString() + "_" +image.getOriginalFilename().replace(" ", "");
 				Path imageRoute = Paths.get("uploads/productImages").resolve(imageName).toAbsolutePath();
 				try {
@@ -210,48 +241,44 @@ public class ProductRestController {
 					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 				}
 				
-				String nameOldImage = productImage.getImageRoute();
-				
-				if(nameOldImage != null && nameOldImage.length()>0) {
-					Path routeOldImage = Paths.get("uploads/productImages").resolve(nameOldImage).toAbsolutePath();
-					File fileOldImage = routeOldImage.toFile();
-					if(fileOldImage.exists() && fileOldImage.canRead()) {
-						fileOldImage.delete();
-					}
-				}
-				
 				productImage.setImageRoute(imageName);
 				productImage.setProductId(product);
 				
-				try {
-					//save the image
-					//productImageService.save(productImage);
-				}catch(DataAccessException e) {
-					response.put("message", "Error while making the query!");
-					response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
-					return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-				}
-				
-				response.put("product", product);
-				response.put("message", "You have uploaded the image: "+imageName+" correctly");
+				productImages.add(productImage);
 			}
-		}	
+		}
+		
+		try {
+			productImageService.saveAll(productImages);
+		}catch(DataAccessException e) {
+			response.put("message", "Error while making the query!");
+			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("product", product);
+		response.put("message", "You have uploaded all the images correctly");
+	
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.CREATED);
 	}
 	
+	/**
+	 * This method is used to show an specific image when is called
+	 * @param imageName
+	 * @return an image
+	 */
 	@GetMapping("/uploads/img/{imageName:.+}")
 	public ResponseEntity<Resource> showImage(@PathVariable String imageName){
 		
 		Path routeFile = Paths.get("uploads/productImages").resolve(imageName).toAbsolutePath();
 		Resource resource = null;
 		
-		try {
-			
+		try {		
 			resource =  new UrlResource(routeFile.toUri());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		}
-		if(!resource.exists() && resource.isReadable()) {
+		if(!resource.exists() && !resource.isReadable()) {
 			throw new RuntimeException("Error when uploading the image");
 		}
 		
@@ -259,4 +286,42 @@ public class ProductRestController {
 		header.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\""+resource.getFilename()+"\"");
 		return new ResponseEntity<Resource>(resource, header, HttpStatus.OK);
 	}
+	
+	/**
+	 * This method is used to delete an unique image
+	 * @param id
+	 * @return status ok if the query is successfully executed.
+	 */
+	@DeleteMapping("/uploads/img/{id}")
+	public ResponseEntity<?> deleteImage(@PathVariable Long id){
+		Map<String, Object> response = new HashMap<>();
+		
+		try {
+			ProductImage productImage = productImageService.findById(id);
+			if(productImage!=null) {
+				String nameOldImage = productImage.getImageRoute();
+				System.out.println(nameOldImage);
+				if(nameOldImage != null && nameOldImage.length()>0) {
+					Path routeOldImage = Paths.get("uploads/productImages").resolve(nameOldImage).toAbsolutePath();
+					File fileOldImage = routeOldImage.toFile();
+					if(fileOldImage.exists() && fileOldImage.canRead()) {
+						fileOldImage.delete();
+						System.out.println("The file was deleted");
+					}
+				}
+				
+				productImageService.delete(id);
+				System.out.println("The file was deleted from the db");
+			}
+
+		}catch(DataAccessException e) {
+			response.put("message", "Error when deleting the product from the database");
+			response.put("error", e.getMessage().concat(":").concat(e.getMostSpecificCause().getMessage()));
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		response.put("message", "The product was successfully removed!");
+		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
 }
