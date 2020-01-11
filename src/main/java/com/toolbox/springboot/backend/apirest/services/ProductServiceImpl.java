@@ -44,4 +44,10 @@ public class ProductServiceImpl implements ProductService {
 	public void delete(Long id) {
 		daoProduct.deleteById(id);
 	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<Product> findByProductName(String term) {
+		return daoProduct.findByProductName(term);
+	}
 }
