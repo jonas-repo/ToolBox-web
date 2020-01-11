@@ -135,7 +135,7 @@ public class ProductRestController {
 	 * This method is used to update a Product
 	 */
 	@PutMapping("/products")
-	public ResponseEntity<?> updateProduct(@RequestParam("product") String modelProduct, @RequestParam("images") MultipartFile[] images) {
+	public ResponseEntity<?> updateProduct(@RequestParam("product") String modelProduct, @RequestParam(name = "images", required=false) MultipartFile[] images) {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Product product = null;
