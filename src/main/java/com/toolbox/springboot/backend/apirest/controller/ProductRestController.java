@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -322,6 +323,12 @@ public class ProductRestController {
 		
 		response.put("message", "The product was successfully removed!");
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	@GetMapping("/products/filter-products/{term}")
+	@ResponseStatus(HttpStatus.OK)
+	public List<Product> filterProducts(@PathVariable String term){
+		return productService.findByProductName(term);
 	}
 	
 }
