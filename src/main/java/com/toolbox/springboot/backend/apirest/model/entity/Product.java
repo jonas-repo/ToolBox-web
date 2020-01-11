@@ -1,11 +1,14 @@
 package com.toolbox.springboot.backend.apirest.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,7 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="product")
@@ -66,8 +69,8 @@ public class Product implements Serializable{
 	@OneToMany(mappedBy="product")
 	List<ProductComments> productComments;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@JsonIgnoreProperties({"productId", "hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade=CascadeType.ALL)
 	List<ProductImage> productImage;
 	
 	@OneToMany(mappedBy="productId")
@@ -78,6 +81,10 @@ public class Product implements Serializable{
 	@OneToMany(mappedBy="product")
 	List<ProductPayment> productPayment;
 
+	
+	public Product() {
+		this.productImage = new ArrayList<>();
+	}
 	
 	@PrePersist
 	public void prePersist() {
@@ -108,11 +115,7 @@ public class Product implements Serializable{
 		this.productImage = productImage;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
-	}
-
-	public long getProductId() {
+	public Long getProductId() {
 		return this.productId;
 	}
 	

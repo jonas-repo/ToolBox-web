@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "productImage")
@@ -31,9 +32,9 @@ public class ProductImage implements Serializable{
 	@NotEmpty
 	private String imageRoute;
 	
-	@ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.ALL)
+	@JsonIgnoreProperties({"productImage", "hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name="productId")
-	@JsonIgnore
 	private Product product;
 	
 	public Long getIdImages() {
