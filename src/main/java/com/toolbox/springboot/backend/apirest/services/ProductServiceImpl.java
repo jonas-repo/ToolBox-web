@@ -50,4 +50,11 @@ public class ProductServiceImpl implements ProductService {
 	public List<Product> findByProductName(String term) {
 		return daoProduct.findByProductName(term);
 	}
+
+	@Override
+	@Transactional(readOnly=true)
+	public List<Product> findByCategory(String category) {
+		// TODO Auto-generated method stub
+		return daoProduct.findByCategory(category);
+	}
 }
