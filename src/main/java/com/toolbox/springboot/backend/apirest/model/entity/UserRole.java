@@ -3,7 +3,9 @@ package com.toolbox.springboot.backend.apirest.model.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +15,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name="userRole")
@@ -28,8 +31,8 @@ public class UserRole implements Serializable {
 	@NotEmpty
 	private String userRoleName;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="userRole")
+	@JsonIgnoreProperties({"userRoleId", "hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="userRole", cascade=CascadeType.ALL)
 	List<UserRoleAssigned> userRoleAssigned;
 
 	public UserRole() {
