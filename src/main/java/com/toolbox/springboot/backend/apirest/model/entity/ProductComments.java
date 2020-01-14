@@ -30,8 +30,7 @@ public class ProductComments implements Serializable {
 	@Temporal(TemporalType.DATE)
 	private Date productCommentDate;
 	
-	@ManyToOne(fetch =FetchType.LAZY,cascade=CascadeType.ALL)
-	@JsonIgnore
+	@ManyToOne(fetch =FetchType.LAZY)
 	@JoinColumn(name="productId")
 	private Product product;
 	

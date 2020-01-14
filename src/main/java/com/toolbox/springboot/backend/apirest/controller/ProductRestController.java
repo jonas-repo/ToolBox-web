@@ -71,7 +71,7 @@ public class ProductRestController {
 	 */
 	@GetMapping("/products/page/{page}")
 	public Page<Product> index(@PathVariable int page){
-		return productService.findAll(PageRequest.of(page, 5));
+		return productService.findAll(PageRequest.of(page, 6));
 	}
 	
 	/**
