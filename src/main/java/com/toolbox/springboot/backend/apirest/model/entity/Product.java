@@ -80,8 +80,21 @@ public class Product implements Serializable{
 	@JsonIgnore
 	@OneToMany(mappedBy="product")
 	List<ProductPayment> productPayment;
+	
+	@JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade=CascadeType.ALL)
+	List<ProductCategory> productCategory;
 
 	
+
+	public List<ProductCategory> getProductCategory() {
+		return productCategory;
+	}
+
+	public void setProductCategory(List<ProductCategory> productCategory) {
+		this.productCategory = productCategory;
+	}
+
 	public Product() {
 		this.productImage = new ArrayList<>();
 	}

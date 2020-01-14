@@ -15,4 +15,8 @@ public interface DAOProduct extends JpaRepository<Product, Long>{
 	public List<Product> findByProductNameContainingIgnoreCase(String term);
 	
 	public List<Product> findByProductNameStartingWithIgnoreCase(String term);
+	
+	//Ivan query to find by category
+	@Query("select p from Product p where p.productCategory like %?1%")
+	public List<Product> findByCategory(String category);
 }
