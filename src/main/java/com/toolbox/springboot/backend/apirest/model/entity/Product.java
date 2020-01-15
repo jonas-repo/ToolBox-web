@@ -67,8 +67,8 @@ public class Product implements Serializable{
 	@JsonIgnore
 	List<ProductRate> productRate;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy="product")
+	@JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade=CascadeType.ALL)
 	List<ProductComments> productComments;
 	
 	@JsonIgnoreProperties({"productId", "hibernateLazyInitializer", "handler"})
