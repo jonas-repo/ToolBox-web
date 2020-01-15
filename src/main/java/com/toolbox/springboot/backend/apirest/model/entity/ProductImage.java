@@ -34,7 +34,6 @@ public class ProductImage implements Serializable{
 	
 	@JsonIgnoreProperties({"productImage", "hibernateLazyInitializer", "handler"})
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name="productId")
 	private Product product;
 	
 	public Long getIdImages() {

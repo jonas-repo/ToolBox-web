@@ -37,6 +37,14 @@ public class UserRoleAssigned implements Serializable{
 	@JsonIgnore
 	private UserRole userRole;
 
+	public UserRole getUserRole() {
+		return userRole;
+	}
+
+	public void setUserRole(UserRole userRole) {
+		this.userRole = userRole;
+	}
+
 	public Long getUserRoleAssignedId() {
 		return userRoleAssignedId;
 	}
