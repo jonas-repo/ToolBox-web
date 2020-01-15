@@ -4,12 +4,15 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -18,6 +21,7 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -30,17 +34,24 @@ public class UserGeneral implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long userId;
 	
-	@NotEmpty(message="no puede ser vacio")
-	@Email(message="El campo email no tiene el formato correcto")
+	@NotEmpty(message="An email is required")
+	@Email(message="Email format is incorrect")
 	@Column(nullable=false, unique=true)
 	private String userEmail;
 	
-	@NotEmpty(message="no puede ser vacio")
-	@Size(min=4,max=12, message="debe de tener entre 4 y 12 caracteres")
-	@Column(nullable=false)
+	
+	@NotEmpty(message="A name is required")
+	@Column(nullable=false, unique=true)
+	private String userFullName;
+	
+	
+	@NotEmpty(message="The password is required")
+	@Size(min=4,max=60, message="the password has to be of more than 4 characters")
+	@Column(nullable=false, length = 60)	
 	private String userPassword;
 	
-	@NotEmpty(message="no puede ser vacio")
+	@NotEmpty(message="Please verify the information")
+	@Email(message="Please verify the information")
 	@Column(nullable=false)
 	private String userName;
 	
@@ -49,7 +60,7 @@ public class UserGeneral implements Serializable{
 	private String userAddress;
 	
 	
-	@NotEmpty(message="El apellido no puede ser vacio")
+	@NotEmpty(message="The last name is required")
 	private String userLastName;
 	private String userPicture;
 	
@@ -63,14 +74,23 @@ public class UserGeneral implements Serializable{
 	@JsonIgnore
 	public List<UserPartnerProducts> userPartnerProducts;	
 
-	@OneToMany(mappedBy ="userGeneral")
-	@JsonIgnore
+	@JsonIgnoreProperties({"userId", "hibernateLazyInitializer", "handler"})
+	@OneToMany(fetch=FetchType.LAZY, mappedBy="userGeneral", cascade=CascadeType.ALL)
 	public List<UserRoleAssigned> userRole;
 	
 
+	public List<UserRoleAssigned> getUserRole() {
+		return userRole;
+	}
+	public void setUserRole(List<UserRoleAssigned> userRole) {
+		this.userRole = userRole;
+	}
 	@JsonIgnore
 	@OneToMany(mappedBy="userGeneral")
 	List<UserPaymentMethods> userPaymentMethods;
+	
+
+	
 	
 	public List<UserPaymentMethods> getUserPaymentMethods() {
 		return userPaymentMethods;
@@ -79,6 +99,12 @@ public class UserGeneral implements Serializable{
 		this.userPaymentMethods = userPaymentMethods;
 	}
 
+	public String getUserFullName() {
+		return userFullName;
+	}
+	public void setUserFullName(String userFullName) {
+		this.userFullName = userFullName;
+	}
 	public Long getUserid() {
 		return userId;
 	}
