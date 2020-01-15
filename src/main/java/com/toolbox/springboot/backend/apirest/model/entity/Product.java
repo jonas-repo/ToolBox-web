@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.persistence.Table;
@@ -84,7 +86,10 @@ public class Product implements Serializable{
 	@JsonIgnoreProperties({"product", "hibernateLazyInitializer", "handler"})
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="product", cascade=CascadeType.ALL)
 	List<ProductCategory> productCategory;
+	
 
+
+	
 	
 
 	public List<ProductCategory> getProductCategory() {

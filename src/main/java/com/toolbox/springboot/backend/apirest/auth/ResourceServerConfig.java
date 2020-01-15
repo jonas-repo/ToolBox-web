@@ -23,9 +23,9 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 	public void configure(HttpSecurity http) throws Exception {
 		// TODO Auto-generated method stub
 		http.authorizeRequests(). //its important to part from the specify to the generic
-	 	antMatchers(HttpMethod.GET,"/**").anonymous().
+	 	antMatchers(HttpMethod.GET,"/**","/uploads/productImages/**").anonymous().
 	 	antMatchers(HttpMethod.POST,"/**").anonymous().
-	 	antMatchers(HttpMethod.DELETE,"/**").permitAll()
+	 	antMatchers(HttpMethod.DELETE,"/**").anonymous()
 	 	/*.antMatchers(HttpMethod.GET, "/api/clientes/{id}").hasAnyRole("USER","ADMIN")
 		.antMatchers(HttpMethod.POST, "/api/clientes/upload").hasAnyRole("USER","ADMIN")
 		.antMatchers(HttpMethod.POST, "/api/clientes/").hasRole("ADMIN")
