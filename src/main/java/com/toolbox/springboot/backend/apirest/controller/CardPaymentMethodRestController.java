@@ -16,19 +16,19 @@ import com.toolbox.springboot.backend.apirest.services.CardPaymentMethodService;
 
 @CrossOrigin(origins = {"http://localhost:3306"})
 @RestController
-@RequestMapping("/profile/{id}")
+@RequestMapping("/profile")
 public class CardPaymentMethodRestController {
 
-	@Autowired
+	@Autowired(required = true)
 	private CardPaymentMethodService cardservice;
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public CardMethod crate(@RequestBody CardMethod card) {
 		return cardservice.save(card);
 	}
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/card/delete/{id}")
 	public void delete(@RequestBody CardMethod card, @PathVariable Long id) {
 		cardservice.delete(id);
 	}

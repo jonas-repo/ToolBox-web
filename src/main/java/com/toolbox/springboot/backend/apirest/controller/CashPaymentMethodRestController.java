@@ -13,18 +13,18 @@ import com.toolbox.springboot.backend.apirest.services.CashPaymentMethodService;
 
 @CrossOrigin(origins = {"http://localhost:3306"})
 @RestController
-@RequestMapping("/profile/{id}")
+@RequestMapping("/profile")
 public class CashPaymentMethodRestController {
 
 	@Autowired
 	private CashPaymentMethodService cashservice;
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/cash/create")
 	public CashPaymentMethod create(@RequestBody CashPaymentMethod method) {
 		return cashservice.save(method);
 	}
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/cash/delete/{id}")
 	public void delete(@PathVariable Long id) {
 		cashservice.delete(id);
 	}

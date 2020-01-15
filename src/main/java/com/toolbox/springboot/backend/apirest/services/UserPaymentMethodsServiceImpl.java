@@ -1,10 +1,12 @@
 package com.toolbox.springboot.backend.apirest.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.toolbox.springboot.backend.apirest.dao.DAOUserPaymentMethods;
 import com.toolbox.springboot.backend.apirest.model.entity.UserPaymentMethods;
 
+@Service
 public class UserPaymentMethodsServiceImpl implements UserPaymentMethodsService{
 
 	@Autowired

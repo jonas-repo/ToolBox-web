@@ -23,13 +23,13 @@ public class UserPaymentMethodRestController {
 	@Autowired
 	private UserPaymentMethodsService paymentmethodservice;
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/payment/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserPaymentMethods create(@RequestBody UserPaymentMethods method) {
 		return paymentmethodservice.save(method);
 	}
 	
-	@GetMapping("/profile/{id}")
+	@GetMapping("/profile/payment/delete/{id}")
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserPaymentMethods show(@PathVariable Long id) {
 		return paymentmethodservice.findById(id);

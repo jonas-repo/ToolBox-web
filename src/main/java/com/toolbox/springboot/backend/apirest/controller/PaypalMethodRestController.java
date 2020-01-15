@@ -15,19 +15,19 @@ import com.toolbox.springboot.backend.apirest.services.PaypalMethodService;
 
 @CrossOrigin(origins = {"http://localhost:3306"})
 @RestController
-@RequestMapping("/profile/{id}")
+@RequestMapping("/profile")
 public class PaypalMethodRestController {
 	
 	@Autowired
 	private PaypalMethodService paypalservice;
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/paypal/create")
 	@ResponseStatus(HttpStatus.CREATED)
 	public PaypalMethod crate(@RequestBody PaypalMethod paypal) {
 		return paypalservice.save(paypal);
 	}
 	
-	@PostMapping("/profile/{id}")
+	@PostMapping("/profile/paypal/delete/{id}")
 	public void delete(@RequestBody PaypalMethod paypal, @PathVariable Long id) {
 		paypalservice.delete(id);
 	}

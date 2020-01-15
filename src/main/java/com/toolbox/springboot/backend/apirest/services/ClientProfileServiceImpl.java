@@ -1,12 +1,13 @@
 package com.toolbox.springboot.backend.apirest.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.toolbox.springboot.backend.apirest.dao.DAOClientProfile;
 import com.toolbox.springboot.backend.apirest.model.entity.UserGeneral;
 
-
+@Service
 public class ClientProfileServiceImpl implements ClientProfileService {
 
 	@Autowired
