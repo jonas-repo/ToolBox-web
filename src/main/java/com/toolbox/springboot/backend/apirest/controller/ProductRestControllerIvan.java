@@ -106,7 +106,7 @@ public class ProductRestControllerIvan {
 		}
 		
 		@PostMapping("/products/comments")
-		public ResponseEntity<?> createProduct(@RequestBody ProductComments productComment) {
+		public ResponseEntity<?> createComment(@RequestBody ProductComments productComment) {
 						
 			ProductComments nProduct = null;
 			Map<String, Object> response = new HashMap<>();

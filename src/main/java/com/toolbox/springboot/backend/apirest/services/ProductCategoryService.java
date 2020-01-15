@@ -12,5 +12,11 @@ public interface ProductCategoryService {
 	public List<ProductCategory> getProductsByCategory(String category);
 	
 	public List<String> findAllCategories();
+	
+	public ProductCategory save(ProductCategory productCategory);
+	
+	public ProductCategory findById(Long id);
+	
+	public ProductCategory findProductCategoryById(String category, Long id);
 
 }

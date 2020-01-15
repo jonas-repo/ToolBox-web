@@ -44,7 +44,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.toolbox.springboot.backend.apirest.model.entity.Product;
+import com.toolbox.springboot.backend.apirest.model.entity.ProductCategory;
 import com.toolbox.springboot.backend.apirest.model.entity.ProductImage;
+import com.toolbox.springboot.backend.apirest.services.ProductCategoryService;
 import com.toolbox.springboot.backend.apirest.services.ProductImageService;
 import com.toolbox.springboot.backend.apirest.services.ProductService;
 
@@ -56,6 +58,8 @@ public class ProductRestController {
 	private ProductService productService;
 	@Autowired
 	private ProductImageService productImageService;
+	@Autowired
+	private ProductCategoryService productCategoryService;
 	/**
 	 * This method is used to return a list of all products
 	 */
@@ -139,7 +143,6 @@ public class ProductRestController {
 		
 		ObjectMapper mapper = new ObjectMapper();
 		Product product = null;
-		
 		try {
 			product = mapper.readValue(modelProduct, Product.class);
 		} catch ( JsonProcessingException e) {
@@ -162,7 +165,8 @@ public class ProductRestController {
 			currentProduct.setProductDescription(product.getProductDescription());
 			currentProduct.setProductPrice(product.getProductPrice());
 			currentProduct.setProductQuantity(product.getProductQuantity());
-			
+			currentProduct.getProductCategory().get(0).setProductCategory(product.getProductCategory().get(0).getProductCategory());
+						
 			updatedProduct = productService.save(currentProduct);
 			
 			uploadImagesProduct(images,updatedProduct);

@@ -29,6 +29,21 @@ public class ProductCategoryServiceImpl implements ProductCategoryService {
 	public List<String> findAllCategories() {
 		return daoProductCategories.findAllCategories();
 	}
+
+	@Override
+	public ProductCategory save(ProductCategory productCategory) {
+		return daoProductCategories.save(productCategory);
+	}
+
+	@Override
+	public ProductCategory findById(Long id) {
+		return daoProductCategories.findById(id).orElse(null);
+	}
+
+	@Override
+	public ProductCategory findProductCategoryById(String category, Long id) {
+		return daoProductCategories.findProductCategoryById(category, id);
+	}
 	
 
 }

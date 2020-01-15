@@ -39,7 +39,7 @@ public class Product implements Serializable{
 	private Long productId;
 	
 	@NotEmpty
-	@Size(max = 50)
+	@Size(max = 255)
 	private String productDescription;
 	
 	@Size(max = 50)

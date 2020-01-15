@@ -13,4 +13,7 @@ public interface DAOCategories extends JpaRepository<ProductCategory, Long>{
 	
 	@Query("SELECT DISTINCT p.productCategory from ProductCategory p")
 	public List<String> findAllCategories();
+	
+	@Query("from ProductCategory p where p.productCategory=?1 and p.product=?2")
+	public ProductCategory findProductCategoryById(String category, Long id);
 }
