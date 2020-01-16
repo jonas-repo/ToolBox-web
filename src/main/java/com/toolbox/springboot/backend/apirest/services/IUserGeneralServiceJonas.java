@@ -15,9 +15,9 @@ public List<UserGeneral> showAll();
 	
 	public UserGeneral Save(UserGeneral user);
 	
-	public void delete(int id);
+	public void delete(Long id);
 	
-	public UserGeneral findById(int id);
+	public UserGeneral findById(Long id);
 	
 	public UserGeneral findByEmail(String email);
 

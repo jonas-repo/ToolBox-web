@@ -9,16 +9,20 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 
 import com.toolbox.springboot.backend.apirest.model.entity.UserGeneral;
 import com.toolbox.springboot.backend.apirest.services.IUserGeneralServiceJonas;
@@ -38,6 +42,12 @@ public class UserGeneralJonasController {
 	public List<UserGeneral> getAllUsers()
 	{
 		return iUserService.showAll();
+	}
+	
+	@GetMapping("/users/page/{page}")
+	public Page<UserGeneral> index(@PathVariable Integer page) {
+		
+		return iUserService.showAll(PageRequest.of(page, 3)); //pagination of the data
 	}
 	
 	@PostMapping("/userregister")
