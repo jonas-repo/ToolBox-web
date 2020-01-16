@@ -21,23 +21,23 @@ public class Payment implements Serializable{
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long paymentId;
 	
-	@NotEmpty
+	
 	@Column(nullable=false)
 	private double paymentPrice;
 	
-	@NotEmpty
+
 	@Column(nullable=false)
 	private int paymentProductQuantity;
 	
-	@NotEmpty
+
 	@Column(nullable=false)
 	private String paymentPickup;
 	
-	@NotEmpty
+
 	@Column(nullable=false)
 	private String paymentStatus;
 	
-	@NotEmpty
+
 	@Column(nullable=false)
 	private Date paymentDate;
 

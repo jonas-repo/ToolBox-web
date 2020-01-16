@@ -43,15 +43,15 @@ public class UserGeneralServiceImplJonas implements IUserGeneralServiceJonas, Us
 	}
 
 	@Override
-	public void delete(int id) {
+	public void delete(Long id) {
 		// TODO Auto-generated method stub
-
+		iUser.deleteById(id);
 	}
 
 	@Override
-	public UserGeneral findById(int id) {
+	public UserGeneral findById(Long id) {
 		// TODO Auto-generated method stub
-		return null;
+		return iUser.findById(id).orElse(null);
 	}
 
 	@Override

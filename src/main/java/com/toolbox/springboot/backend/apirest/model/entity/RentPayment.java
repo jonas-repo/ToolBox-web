@@ -30,17 +30,18 @@ public class RentPayment implements Serializable
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private long rentPaymentId;
 	
-	@NotEmpty
+	
 	@Temporal(TemporalType.DATE)
 	private Date rentPaymentTimeStart;
 	
-	@NotEmpty
+
 	@Temporal(TemporalType.DATE)
 	private Date rentPaymentTimeEnd;
 	
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "paymentId" )
 	private Payment paymentId;
+	
 	
 	@Temporal(TemporalType.DATE)
 	private Date rentPaymentDate;
