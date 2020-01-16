@@ -25,7 +25,8 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter{
 		http.authorizeRequests(). //its important to part from the specify to the generic
 	 	antMatchers(HttpMethod.GET,"/**","/uploads/productImages/**").anonymous().
 	 	antMatchers(HttpMethod.POST,"/**").anonymous().
-	 	antMatchers(HttpMethod.DELETE,"/**").anonymous()
+	 	antMatchers(HttpMethod.DELETE,"/**").anonymous().
+	 	antMatchers(HttpMethod.PUT,"/**").anonymous()
 	 	/*.antMatchers(HttpMethod.GET, "/api/clientes/{id}").hasAnyRole("USER","ADMIN")
 		.antMatchers(HttpMethod.POST, "/api/clientes/upload").hasAnyRole("USER","ADMIN")
 		.antMatchers(HttpMethod.POST, "/api/clientes/").hasRole("ADMIN")
